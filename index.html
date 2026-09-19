@@ -162,6 +162,41 @@ section:last-of-type { border-bottom: none; }
   flex-shrink: 0;
 }
 
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 4px;
+}
+.nav-toggle span {
+  display: block;
+  width: 18px; height: 2px;
+  background: var(--text);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+@media (max-width: 640px) {
+  .nav-toggle { display: flex; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 64px; left: 0; right: 0;
+    flex-direction: column;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    gap: 16px;
+  }
+  .nav-links.open { display: flex; }
+}
+
 .nav-links {
   display: flex;
   gap: 30px;
@@ -520,10 +555,12 @@ section:last-of-type { border-bottom: none; }
 }
 .timeline-fill {
   position: absolute; left: 0; top: 0; bottom: 0;
-  width: 44%;
   background: linear-gradient(90deg, var(--accent-dim), var(--accent));
   border-radius: 4px;
 }
+
+.ccna-fill    { width: 44%; }   /* CCNA stays where you had it */
+.project-fill { width: 100%; }  /* Service Desk = full */
 
 .timeline-stages {
   display: grid;
@@ -657,6 +694,9 @@ footer .built-with { font-family: var(--font-mono); }
 <nav class="nav">
   <div class="wrap">
     <a href="#top" class="nav-id"><span class="dot"></span>brian.waweru</a>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
@@ -951,7 +991,7 @@ Success rate is 100 percent (5/5)
       </div>
 
       <div class="timeline">
-        <div class="timeline-track"><div class="timeline-fill"></div></div>
+        <div class="timeline-track"><div class="timeline-fill ccna-fill"></div></div>
         <div class="timeline-stages">
           <div class="stage done">
             <div class="stage-dot"></div>
@@ -1118,6 +1158,23 @@ Success rate is 100 percent (5/5)
     <p>&copy; 2026 Brian Waweru. All rights reserved.</p>
   </div>
 </footer>
+
+
+<script>
+  const toggle = document.querySelector('.nav-toggle');
+  const links  = document.querySelector('.nav-links');
+  toggle.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  // Close menu when a link is tapped
+  links.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => {
+      links.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    })
+  );
+</script>
 
 </body>
 </html>
