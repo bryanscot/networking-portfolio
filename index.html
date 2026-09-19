@@ -183,7 +183,7 @@ section:last-of-type { border-bottom: none; }
 .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 @media (max-width: 640px) {
-  .nav-toggle { display: flex; }
+  /* .nav-toggle { display: flex; }
   .nav-links {
     display: none;
     position: absolute;
@@ -193,7 +193,7 @@ section:last-of-type { border-bottom: none; }
     border-bottom: 1px solid var(--border);
     padding: 16px 24px;
     gap: 16px;
-  }
+  } */
   .nav-links.open { display: flex; }
 }
 
@@ -682,7 +682,113 @@ footer .built-with { font-family: var(--font-mono); }
   .timeline-stages { grid-template-columns: repeat(2, 1fr); }
   .hero { padding: 64px 0 72px; }
   .cert-card { padding: 24px 20px; }
+
+
+
+  /* --- Section padding / layout (your existing rules) --- */
+  section { padding: 72px 0; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .timeline-stages { grid-template-columns: repeat(2, 1fr); }
+  .hero { padding: 64px 0 72px; }
+  .cert-card { padding: 24px 20px; }
+
+  /* ============================================================
+     MOBILE NAVIGATION
+     ============================================================ */
+
+  /* Two-row bar: brand + CTA + hamburger on top, links below */
+  .nav .wrap {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 12px 20px;
+    row-gap: 0;
+  }
+
+  /* Show hamburger */
+  .nav-toggle {
+    display: flex;
+    margin-left: auto;      /* push to far right */
+    align-self: center;
+  }
+
+  /* Compact CTA so it doesn't crowd the bar */
+  .nav-cta {
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    margin-right: 10px;
+  }
+
+  /* Links become a full-width animated panel */
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;       /* force onto its own row */
+    gap: 0;
+
+    /* Collapsed state */
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0 4px;
+
+    /* Animation */
+    transition: max-height 0.28s ease, opacity 0.22s ease, padding 0.28s ease;
+  }
+
+  /* Open state */
+  .nav-links.open {
+    max-height: 320px;      /* tall enough for all 5 links */
+    opacity: 1;
+    padding: 10px 4px 16px;
+    margin-top: 8px;
+    border-top: 1px solid var(--border-soft);
+  }
+
+  /* Each link: bigger tap target + divider between items */
+  .nav-links li {
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .nav-links li:last-child {
+    border-bottom: none;
+  }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 6px;
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    transition: color 0.15s ease, padding-left 0.15s ease;
+  }
+
+  /* Chevron arrow appended to each link */
+  .nav-links a::before {
+    content: "›";
+    order: 2;
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--text-faint);
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+
+  /* Kill the desktop underline animation inside the mobile menu */
+  .nav-links a::after { display: none; }
+
+  /* Hover / focus state */
+  .nav-links a:hover,
+  .nav-links a:focus-visible {
+    color: var(--text);
+    padding-left: 12px;
+  }
+  .nav-links a:hover::before,
+  .nav-links a:focus-visible::before {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
 }
+
 </style>
 </head>
 <body>
@@ -1162,17 +1268,35 @@ Success rate is 100 percent (5/5)
 <script>
   const toggle = document.querySelector('.nav-toggle');
   const links  = document.querySelector('.nav-links');
-  toggle.addEventListener('click', () => {
+  const nav    = document.querySelector('.nav');
+
+  function closeMenu() {
+    links.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+
+  // Toggle on hamburger tap
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();  // prevent the document listener from firing immediately
     const open = links.classList.toggle('open');
     toggle.setAttribute('aria-expanded', open);
   });
-  // Close menu when a link is tapped
+
+  // Close when a link is tapped
   links.querySelectorAll('a').forEach(a =>
-    a.addEventListener('click', () => {
-      links.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    })
+    a.addEventListener('click', closeMenu)
   );
+
+  // Close when tapping anywhere outside the nav
+  document.addEventListener('click', (e) => {
+    if (!links.classList.contains('open')) return;
+    if (!nav.contains(e.target)) closeMenu();
+  });
+
+  // Close on Escape key (keyboard accessibility)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
 </script>
 
 </body>
