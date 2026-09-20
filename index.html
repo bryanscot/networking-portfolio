@@ -1183,12 +1183,12 @@ Success rate is 100 percent (5/5)
             <h4>Fundamentals</h4>
             <p>OSI/TCP-IP, addressing</p>
           </div>
-          <div class="stage current">
+          <div class="stage done">
             <div class="stage-dot"></div>
             <h4>Network Access</h4>
             <p>VLANs, STP, trunking</p>
           </div>
-          <div class="stage">
+          <div class="stage current">
             <div class="stage-dot"></div>
             <h4>IP Connectivity</h4>
             <p>Routing, OSPF</p>
@@ -1258,7 +1258,17 @@ Success rate is 100 percent (5/5)
         </div>
       </div>
 
-      <form class="form-grid" onsubmit="return false;">
+      <form class="form-grid" action="https://api.web3forms.com/submit" method="POST">
+        <!-- Replace YOUR-ACCESS-KEY-HERE with the key from Step 1 -->
+        <input type="hidden" name="access_key" value="89e4f423-5d29-4651-996e-344392ddf9c1">
+        
+        <!-- Optional: Customize the email you receive -->
+        <input type="hidden" name="subject" value="New Portfolio Message from Brian's Website">
+        <input type="hidden" name="from_name" value="Brian's Portfolio">
+        
+        <!-- This is a spam honeypot - bots fill it out, humans don't see it -->
+        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
         <div class="form-row">
           <div class="field">
             <label for="name">Name</label>
