@@ -51,7 +51,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 350px; /* keeps anchored sections clear of the sticky nav */
+  scroll-padding-top: 0px; /* keeps anchored sections clear of the sticky nav */
 }
 
 body {
@@ -195,6 +195,11 @@ section:last-of-type { border-bottom: none; }
     gap: 16px;
   } */
   .nav-links.open { display: flex; }
+
+  html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 350px; /* keeps anchored sections clear of the sticky nav */
+}
 }
 
 .nav-links {
@@ -585,6 +590,22 @@ section:last-of-type { border-bottom: none; }
 .stage p { font-size: 0.72rem; color: var(--text-faint); line-height: 1.4; }
 .stage.done h4 { color: var(--text); }
 .stage.current h4 { color: var(--amber); }
+
+
+
+/* ==========================================================================
+   Hands-On Projects
+   ========================================================================== */
+
+.cert-actions {
+  margin-top: 2rem;          /* was 1rem — doubles the space above */
+  padding-top: 1.25rem;      /* was 1rem — slightly more room inside */
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+
+
+
 
 /* ==========================================================================
    9. CONTACT
@@ -1259,11 +1280,16 @@ Success rate is 100 percent (5/5)
      FOOTER
      ========================================================= -->
 <footer>
-  <div class="wrap">
-    <p>&copy; 2026 Brian Waweru. All rights reserved.</p>
-  </div>
+<div class="wrap">
+  <p>&copy; <span id="year">2026</span> Brian Waweru. All rights reserved.</p>
+</div>
 </footer>
 
+
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 
 <script>
   const toggle = document.querySelector('.nav-toggle');
