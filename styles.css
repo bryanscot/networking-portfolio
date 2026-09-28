@@ -33,12 +33,64 @@
   --content-w: 1120px;
   --radius-sm: 4px;
   --radius-md: 8px;
+
+    /* Ambient glow — overridden per theme */
+  --glow-1: rgba(57,232,148,0.07);
+  --glow-2: rgba(57,232,148,0.04);
+
+   /* Sticky nav background */
+  --nav-bg: rgba(7, 16, 15, 0.82);
+}
+
+/* ==========================================================================
+   1b. LIGHT THEME
+   Activated by [data-theme="light"] on <html>. Only colour tokens are
+   overridden — everything else inherits from :root above.
+   Dark theme remains the default (no attribute = dark).
+   ========================================================================== */
+[data-theme="light"] {
+  /* Backgrounds, lightest to darkest */
+  --bg:          #f7faf8;
+  --bg-alt:      #ffffff;
+  --surface:     #ffffff;
+  --surface-2:   #f1f5f3;
+  --border:      #d9e3de;
+  --border-soft: #e7efeb;
+
+  /* Text */
+  --text:        #0d1a16;
+  --text-dim:    #3f5751;
+  --text-faint:  #6c837c;
+
+  /* Accents — same green identity, deepened for contrast on white */
+  --accent:      #0f9d58;
+  --accent-dim:  #0b7a44;
+  --amber:       #c47a00;
+  --red:         #d64545;
+
+  /* Softer ambient glow on a light background */
+  --glow-1: rgba(15,157,88,0.06);
+  --glow-2: rgba(15,157,88,0.04);
+
+  /* Nav background for light mode */
+  --nav-bg: rgba(247, 250, 248, 0.85);
 }
 
 /* ==========================================================================
    2. RESET & BASE
    ========================================================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Smooth colour transitions on theme switch — scoped to visible surfaces
+   so it never interferes with the nav hamburger animation or terminal blink. */
+body, section, .nav, .btn, .skill-card, .project-card, .cert-card,
+.facts, .contact-item, .field input, .field textarea, .tag,
+.section-head h2, .hero h1, .hero .role, .hero p.tagline {
+  transition:
+    background-color 0.25s ease,
+    border-color     0.25s ease,
+    color            0.25s ease;
+}
 
 html {
   scroll-behavior: smooth;
@@ -52,8 +104,8 @@ body {
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   background-image:
-    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(57,232,148,0.07), transparent 60%),
-    radial-gradient(ellipse 700px 500px at 100% 10%, rgba(57,232,148,0.04), transparent 60%);
+    radial-gradient(ellipse 900px 500px at 15% -10%, var(--glow-1), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 10%, var(--glow-2), transparent 60%);
   background-attachment: fixed;
 }
 
@@ -124,7 +176,7 @@ section:last-of-type { border-bottom: none; }
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(7, 16, 15, 0.82);
+  background: var(--nav-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-soft);
@@ -311,11 +363,16 @@ section:last-of-type { border-bottom: none; }
 
 /* --- Terminal window, the hero's centrepiece --- */
 .terminal {
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
+  background: #0c1917;               /* pinned dark — terminal stays dark in both themes */
+  border: 1px solid #1e332e;
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: 0 30px 70px -30px rgba(0,0,0,0.65), 0 0 0 1px rgba(57,232,148,0.04);
+}
+
+/* Lighter, cooler shadow when the page around it is bright */
+[data-theme="light"] .terminal {
+  box-shadow: 0 20px 50px -25px rgba(13,26,22,0.25), 0 0 0 1px rgba(0,0,0,0.04);
 }
 
 .terminal-bar {
@@ -323,8 +380,8 @@ section:last-of-type { border-bottom: none; }
   align-items: center;
   gap: 8px;
   padding: 11px 14px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  background: #10201d;
+  border-bottom: 1px solid #1e332e;
 }
 
 .terminal-bar .tdot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
@@ -345,14 +402,14 @@ section:last-of-type { border-bottom: none; }
   line-height: 1.75;
   padding: 22px 20px;
   overflow-x: auto;
-  color: var(--text-dim);
+  color: #92aca4;                    /* pinned dim grey-green — reads on dark terminal */
 }
 
-.terminal .prompt { color: var(--accent); }
-.terminal .cmd { color: var(--text); }
-.terminal .hdr { color: var(--text-faint); }
-.terminal .up { color: var(--accent); }
-.terminal .cur { color: var(--text); }
+.terminal .prompt { color: #39e894; }
+.terminal .cmd    { color: #eaf4f0; }
+.terminal .hdr    { color: #5c766e; }
+.terminal .up     { color: #39e894; }
+.terminal .cur    { color: #eaf4f0; }
 .terminal .cur::after {
   content: "▌";
   color: var(--accent);
@@ -717,10 +774,17 @@ footer .built-with { font-family: var(--font-mono); }
     row-gap: 0;
   }
 
-  /* Show hamburger */
+   /* Show hamburger */
   .nav-toggle {
     display: flex;
-    margin-left: auto;      /* push to far right */
+    margin-left: 0;         /* theme toggle now pushes right instead */
+    align-self: center;
+  }
+
+  /* Theme toggle sits in the top bar, right-aligned */
+  .theme-toggle {
+    margin-left: auto;
+    margin-right: 10px;
     align-self: center;
   }
 
@@ -798,5 +862,100 @@ footer .built-with { font-family: var(--font-mono); }
   .nav-links a:focus-visible::before {
     color: var(--accent);
     transform: translateX(3px);
+  }
+}
+
+
+/* ==========================================================================
+   12. THEME TOGGLE (sun / moon)
+   Dark is the default: moon is visible, sun is hidden.
+   When <html data-theme="light"> is set, they cross-fade.
+   ========================================================================== */
+.theme-toggle {
+  --toggle-size: 38px;
+  position: relative;
+  width: var(--toggle-size);
+  height: var(--toggle-size);
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition:
+    border-color 0.2s ease,
+    background   0.2s ease,
+    color        0.2s ease,
+    transform    0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  background: var(--surface-2);
+  color: var(--accent);
+  transform: scale(1.06);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Both icons are stacked; they cross-fade + rotate past each other */
+.theme-toggle .icon {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  transition:
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity   0.35s ease;
+  will-change: transform, opacity;
+}
+
+/* Default = dark theme: moon on, sun off */
+.theme-toggle .icon-moon { transform: rotate(0deg)   scale(1);   opacity: 1; }
+.theme-toggle .icon-sun  { transform: rotate(-90deg) scale(0.4); opacity: 0; }
+
+/* Light theme: sun on, moon off */
+[data-theme="light"] .theme-toggle .icon-moon { transform: rotate(90deg) scale(0.4); opacity: 0; }
+[data-theme="light"] .theme-toggle .icon-sun  { transform: rotate(0deg)  scale(1);   opacity: 1; }
+
+/* Very slow sun spin while in light mode — subtle "alive" cue */
+@keyframes sun-spin {
+  from { transform: rotate(0deg)   scale(1); }
+  to   { transform: rotate(360deg) scale(1); }
+}
+[data-theme="light"] .theme-toggle .icon-sun {
+  animation: sun-spin 24s linear infinite;
+}
+
+/* Reduced motion: instant swap, no spin */
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle .icon,
+  [data-theme="light"] .theme-toggle .icon-sun {
+    animation: none !important;
+    transition: none !important;
+  }
+  .theme-toggle .icon-moon { opacity: 1; transform: none; }
+  .theme-toggle .icon-sun  { opacity: 0; transform: none; }
+  [data-theme="light"] .theme-toggle .icon-moon { opacity: 0; }
+  [data-theme="light"] .theme-toggle .icon-sun  { opacity: 1; }
+}
+
+/* ---------- Desktop layout: brand | links | toggle | cta ---------- */
+@media (min-width: 641px) {
+  .nav-links {
+    margin-left: auto;
+  }
+  .theme-toggle {
+    margin-left: 20px;
+  }
+  .nav-cta {
+    margin-left: 16px;
   }
 }
