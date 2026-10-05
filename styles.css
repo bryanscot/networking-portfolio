@@ -94,7 +94,7 @@ body, section, .nav, .btn, .skill-card, .project-card, .cert-card,
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 0px; /* keeps anchored sections clear of the sticky nav */
+  /*scroll-padding-top: 0px; keeps anchored sections clear of the sticky nav */
 }
 
 body {
@@ -241,7 +241,7 @@ section:last-of-type { border-bottom: none; }
 
   html {
   scroll-behavior: smooth;
-  scroll-padding-top: 400px; /* keeps anchored sections clear of the sticky nav */
+  /*scroll-padding-top: 400px;  keeps anchored sections clear of the sticky nav */
 }
 }
 
